@@ -13,7 +13,8 @@ https://github.com/ansible/ansible-examples
 You do need to specify the full path to the playbook for example
 e.g /var/lib/playbooks/tomcat-standalone/site.yml
 
-You'll also need to update the ansible host to be webserver1
+
+Based on the playbook you want to run, you'll also need to update the AnsibleHost parameter.  For example if you wanted to run the tomcat-standalone playbook, you'd use tomcat-servers, based on the site.yml playbook.
 
 
 If you're experimenting with the git-keys version because eventually you want to use your own private bucket.
