@@ -14,7 +14,7 @@ You do need to specify the full path to the playbook for example
 e.g /var/lib/playbooks/tomcat-standalone/site.yml
 
 
-Based on the playbook you want to run, you'll also need to update the AnsibleHost parameter.  For example if you wanted to run the tomcat-standalone playbook, you'd use tomcat-servers, based on the site.yml playbook.
+Based on the playbook you want to run, you'll also need to update the AnsibleHost parameter.  For example if you wanted to run the tomcat-standalone playbook, you'd use tomcat-servers, based on the site.yml host declaration.
 
 
 If you're experimenting with the git-keys version because eventually you want to use your own private bucket.
