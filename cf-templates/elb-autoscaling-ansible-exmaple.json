@@ -50,7 +50,7 @@
     },
     "GitRepo": {
       "Description": "Path to the .git repo to check out",
-      "Default": "git@github.com:/github.com/ansible/ansible-examples.git",
+      "Default": "https://github.com/ansible/ansible-examples.git",
       "Type": "String"
     },
     "WebServerPort": {
@@ -134,60 +134,6 @@
     }
   },
   "Resources": {
-    "InstanceRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "ec2.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Path": "/"
-      }
-    },
-    "RolePolicies": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "S3Download",
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:GetObject"
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::MYBUCKET/*"
-            }
-          ]
-        },
-        "Roles": [
-          {
-            "Ref": "InstanceRole"
-          }
-        ]
-      }
-    },
-    "InstanceProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-        "Path": "/",
-        "Roles": [
-          {
-            "Ref": "InstanceRole"
-          }
-        ]
-      }
-    },
     "WebServerGroup": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
@@ -209,20 +155,13 @@
     "LaunchConfig": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Metadata": {
-        "Comment1": "cfn-init config. get git keys for ansible pull",
-        "AWS::CloudFormation::Authentication": {
-          "S3AccessCreds": {
-            "type": "S3",
-            "roleName": {
-              "Ref": "InstanceRole"
-            }
-          }
-        },
+        "Comment1": "cfn-init install ansible and git for ansible pull",
         "AWS::CloudFormation::Init": {
           "config": {
             "packages": {
               "yum": {
-                "ansible": []
+                "ansible": [],
+                "git" : []
               }
             },
             "files": {
@@ -242,20 +181,6 @@
                 "mode": "000644",
                 "owner": "root",
                 "group": "root"
-              },
-              "/root/.ssh/id_rsa": {
-                "source": "https://s3.amazonaws.com/sb-dev-build-files/git/devopsdev.pem",
-                "mode": "000400",
-                "owner": "root",
-                "group": "root",
-                "authentication": "S3AccessCreds"
-              },
-              "/root/.gitconfig": {
-                "source": "https://s3.amazonaws.com/sb-dev-build-files/devops.gitconfig",
-                "mode": "000644",
-                "owner": "root",
-                "group": "root",
-                "authentication": "S3AccessCreds"
               }
             }
           }
@@ -413,6 +338,7 @@
               ]
             }
           }
+
         ]
       }
     }
